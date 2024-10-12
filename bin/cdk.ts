@@ -6,7 +6,7 @@ import { DifyOnAwsStack } from '../lib/dify-on-aws-stack';
 const app = new cdk.App();
 new DifyOnAwsStack(app, 'DifyOnAwsStack', {
   env: {
-    region: 'us-west-2',
+    region: 'ap-northeast-1',
     // You need to explicitly set AWS account ID when you look up an existing VPC.
     // account: '123456789012'
   },
