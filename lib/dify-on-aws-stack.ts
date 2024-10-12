@@ -88,6 +88,18 @@ interface DifyOnAwsStackProps extends cdk.StackProps {
    * @default false
    */
   allowAnySyscalls?: boolean;
+
+  /**
+   * NAT Gatewayの数
+   * @default 1
+   */
+  natGatewayCount?: number;
+
+  /**
+   * タスクのDesiredCount
+   * @default 1
+   */
+  desiredTaskCount?: number;
 }
 
 export class DifyOnAwsStack extends cdk.Stack {
@@ -98,6 +110,8 @@ export class DifyOnAwsStack extends cdk.Stack {
       difyImageTag: imageTag = 'latest',
       difySandboxImageTag: sandboxImageTag = 'latest',
       allowAnySyscalls = false,
+      natGatewayCount = process.env.NAT_GATEWAY_COUNT ? Number(process.env.NAT_GATEWAY_COUNT) : 1,
+      desiredTaskCount = process.env.DESIRED_TASK_COUNT ? Number(process.env.DESIRED_TASK_COUNT) : 1,
     } = props;
 
     let vpc: IVpc;
@@ -105,12 +119,12 @@ export class DifyOnAwsStack extends cdk.Stack {
       vpc = Vpc.fromLookup(this, 'Vpc', { vpcId: props.vpcId });
     } else {
       vpc = new Vpc(this, 'Vpc', {
+        natGateways: natGatewayCount,
         ...(props.cheapVpc
           ? {
               natGatewayProvider: NatProvider.instanceV2({
                 instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
               }),
-              natGateways: 1,
             }
           : {}),
         maxAzs: 2,
@@ -170,12 +184,14 @@ export class DifyOnAwsStack extends cdk.Stack {
       imageTag,
       sandboxImageTag,
       allowAnySyscalls,
+      desiredTaskCount,
     });
 
     new WebService(this, 'WebService', {
       cluster,
       alb,
       imageTag,
+      desiredTaskCount,
     });
 
     new WorkerService(this, 'WorkerService', {
@@ -185,6 +201,7 @@ export class DifyOnAwsStack extends cdk.Stack {
       storageBucket,
       encryptionSecret: api.encryptionSecret,
       imageTag,
+      desiredTaskCount,
     });
 
     new cdk.CfnOutput(this, 'DifyUrl', {

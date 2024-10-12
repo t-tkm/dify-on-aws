@@ -16,6 +16,7 @@ export interface WorkerServiceProps {
   encryptionSecret: ISecret;
 
   imageTag: string;
+  desiredTaskCount?: number;
 
   /**
    * If true, enable debug outputs
@@ -93,6 +94,7 @@ export class WorkerService extends Construct {
     const service = new ecs.FargateService(this, 'FargateService', {
       cluster,
       taskDefinition,
+      desiredCount: props.desiredTaskCount ?? 1,
       capacityProviderStrategies: [
         {
           capacityProvider: 'FARGATE',

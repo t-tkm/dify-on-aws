@@ -21,6 +21,7 @@ export interface ApiServiceProps {
   imageTag: string;
   sandboxImageTag: string;
   allowAnySyscalls: boolean;
+  desiredTaskCount?: number;
 
   /**
    * If true, enable debug outputs
@@ -187,6 +188,7 @@ export class ApiService extends Construct {
     const service = new ecs.FargateService(this, 'FargateService', {
       cluster,
       taskDefinition,
+      desiredCount: props.desiredTaskCount ?? 1,
       capacityProviderStrategies: [
         {
           capacityProvider: 'FARGATE',
