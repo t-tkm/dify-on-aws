@@ -90,7 +90,11 @@ interface DifyOnAwsStackProps extends cdk.StackProps {
   allowAnySyscalls?: boolean;
 
   /**
-   * NAT Gatewayの数
+   * NAT Gatewayの数。natGatewayCountがmaxAzsより大きい場合、
+   * maxAzs の値までしかNATゲートウェイは作成されません。
+   * 例: maxAzsが2の場合、natGatewayCountが3でも2つの
+   * NATゲートウェイが作成されます。
+
    * @default 1
    */
   natGatewayCount?: number;
