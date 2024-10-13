@@ -1,4 +1,4 @@
-# Dify on AWS with CDK
+# Dify on AWS with CDK(Frugal)
 ## はじめに
 [こちらの記事](https://note.com/yukkie1114/n/n0d9c5551569f)
 で紹介されているDifyのAWSへのデプロイ方法をカスタマイズしたものになります。
