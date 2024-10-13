@@ -6,6 +6,8 @@
 オリジナルのGitHubプロジェクトは[こちら](https://github.com/aws-samples/dify-self-hosted-on-aws)です。
 
 ## カスタマイズ後の利用方法
+※事前準備などは、オリジナルの記事を参照してください。
+
 - 起動(最小リソース)
     ```
     NAT_GATEWAY_COUNT=1 DESIRED_TASK_COUNT=1 cdk deploy
